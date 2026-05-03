@@ -22,6 +22,7 @@ class BinaryTree:
             result.append(curr.data)
 
             # SCENARIO: Push Right first so Left is popped first (LIFO)
+            # left was pushed later, so left comes out first. Before right.
             if curr.right is not None:
                 stack.append(curr.right)
             if curr.left is not None:
@@ -97,4 +98,48 @@ Iterative In-order (The Pointer Scenario): You cannot rely solely on popping fro
 
 Iterative Post-order (The Reverse Hack Scenario): Standard iterative post-order is notoriously complex to write with one stack. The most interview-optimized way to solve it is to mirror the Pre-order logic (process node, push left, push right) which generates a Root -> Right -> Left sequence. Once the loop is done, you simply reverse the resulting array to get Left -> Right -> Root.
 
+"""
+
+
+"""
+Self analysis without AI:
+
+Why not use expectation faith?
+LC and RC (smaller instances) - both know how to perform their respective traversals. They do.
+And then, once left is done, you perform your work in the current instance.
+And then, take the result from the right.
+
+InOrder - using Expectation-Faith! Does it fail? Why?
+Reasoning. Not just theory. Dry run - proof in notebook using pen and my brain!
+
+
+
+# Decoding the approach given:
+result - list to contain the traversal in the right sequence / order.
+curr - initialized to root.
+
+this time, we don't want the root as the first element.
+
+We want to go deep into the Tree - Left side, until LC of current node is not null.
+
+Now, you have reached a point that you have made a call to the LC of a leaf or a node which has no LC (might still have RC - one child node). So, the new value of curr pointer is Null. We don't do anything with this. We just return if it were normal recursion.
+
+But now, we take care of this case.
+So, just to get myself to concentrate at the right thing:
+    At this moment: we made a call to the LC of the stackTop. And the LC is a null value. But stackTop is kind of the root (of the smaller subtree). If this were a 3 node tree, where LC is null, then we would be printing the current stackTop.
+    So, it is only fair that we pop the stackTop and append it to the result list. (visualize a 3 element mini binary tree. Forget the rest of the bigger problem) And now, we have finished processing the Left side of this mini Binary Tree.
+    So, append the Right Side of this curr (popped Node) to the stack.
+
+    You see? Expectation & Faith are still implicitly being used. This formula is completely magical!
+
+So, we were diving deep. Adding more and more elements to the stack along the left path.
+Until we reached the leftmost leaf (or a node with no LC - since it could have a RC).
+At this moment, we have the curr pointing to None and the top of stack having this leftMost leaf.
+Now, we push the RC at the Top, since the ROOT of this small Subtree with curr as the root and having LC = Null is already processed. It is now popped from the Stack and placed into the result list.
+
+So, we checked the L, the root (N). 
+Now, we go to the right. If RC is not Null, push it as stackTop.
+High level: LC (Basically, the entire Left subTree) is done. The current Node, the Root is done. Now, we shift our attention to the RC(Right Subtree). This is sort of the High Level abstract thinking.
+
+Focusing on WHAT without OVERTHKINKING about the HOW!
 """
